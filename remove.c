@@ -38,7 +38,7 @@ int main(int argc, const char *argv[])
     if (i)
     {
         // Delete every entry specified
-        for (; i < argc; ++i)
+        for (; i < argc; i++)
         {
             int r = deleteEntry(argv[i]);
             if (r == -1 && isForced == 0)
@@ -54,6 +54,7 @@ int main(int argc, const char *argv[])
         fputs("Invalid syntax.\n\nSyntax is:\n./remove [-iRr] file...\n./remove -f [-iRr] [file...]\n", stderr);
         returnValue = EXIT_FAILURE;
     }
+    
     return returnValue;
 }
 
@@ -117,7 +118,7 @@ static void parseOption(const char *sOption)
 static int parseArgs(int argc, const char *argv[])
 {
     // Process every option provided
-    for (int i = 1; i < argc; ++i)
+    for (int i = 1; i < argc; i++)
     {
         if (argv[i][0] == '-')
             parseOption(argv[i]);
