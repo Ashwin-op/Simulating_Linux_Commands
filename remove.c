@@ -12,7 +12,7 @@
 
 #define IS_DIR(mode) ((mode & S_IFMT) == S_IFDIR)
 
-// Static variables used to save the set options (-r, -R, -i or -f).
+// Static variables used to save the set options (-r, -R, -i or -f)
 static int isRecursive;
 static int isInteractive;
 static int isForced;
@@ -26,13 +26,13 @@ static int deleteDir(const char *sDir);
 static int deleteEntry(const char *sDir);
 
 /***
-* Description: User code entry point.
+* Description: User code entry point
 *
 * Returns:     EXIT_SUCCESS on success or EXIT_FAILURE on error
 ***/
 int main(int argc, const char *argv[])
 {
-    int i = parseArgs(argc, argv); // Parse all arguments provided. This function returns the index of the first entry to be deleted.
+    int i = parseArgs(argc, argv); // Parse all arguments provided. This function returns the index of the first entry to be deleted
     int returnValue = EXIT_SUCCESS;
 
     if (i)
@@ -50,7 +50,7 @@ int main(int argc, const char *argv[])
     }
     else if (isForced == 0)
     {
-        // "remove -f" is actually allowed, catch this case here.
+        // "remove -f" is actually allowed, catch this case here
         fputs("Invalid syntax.\n\nSyntax is:\n./remove [-iRr] file...\n./remove -f [-iRr] [file...]\n", stderr);
         returnValue = EXIT_FAILURE;
     }
@@ -59,7 +59,7 @@ int main(int argc, const char *argv[])
 }
 
 /***
-* Description: Checks whether the user has confirmed the current operation (with 'y' or 'Y').
+* Description: Checks whether the user has confirmed the current operation (with 'y' or 'Y')
 *
 * Returns:     1 on success or 0 on error
 ***/
@@ -108,7 +108,7 @@ static void parseOption(const char *sOption)
 
 /***
 * Description: Parses the arguments given. Calls parseOption if an option block is encountered.
-*              Stops on first file argument found (from left to right).
+*              Stops on first file argument found (from left to right)
 * Parameters:
 *   argc:   Number of arguments
 *   argv:   Array of arguments
@@ -130,7 +130,7 @@ static int parseArgs(int argc, const char *argv[])
 }
 
 /***
-* Description: Deletes a whole directory. Called by deleteEntry.
+* Description: Deletes a whole directory. Called by deleteEntry
 *
 * Parameters:
 *   sDir:      Path to the directory to be deleted
@@ -151,7 +151,7 @@ static int deleteDir(const char *sDir)
             return -1;
 
         pPath[lenDirPath] = '/';         // Add directory delimiter at the end
-        memcpy(pPath, sDir, lenDirPath); // Copy rest of the name of the directory (Note: String is not nul-terminated yet) */
+        memcpy(pPath, sDir, lenDirPath); // Copy rest of the name of the directory (Note: String is not null-terminated yet)
 
         // Delete every directory-entry in the current directory (sDir).
         struct dirent *pDirEntry;
@@ -162,7 +162,7 @@ static int deleteDir(const char *sDir)
             {
                 // Build the actual path of the directory entry to be deleted
                 size_t lenEntry = strlen(pDirEntry->d_name);
-                pPath = realloc(pPath, lenDirPath + 1 + lenEntry + 1); // Two addiontal bytes needed: For '/' and the terminating 0
+                pPath = realloc(pPath, lenDirPath + 1 + lenEntry + 1); // Two additional bytes needed: For '/' and the terminating 0
                 if (pPath == NULL)
                     return -1;
 
@@ -181,7 +181,7 @@ static int deleteDir(const char *sDir)
 }
 
 /***
-* Description: Deletes a directory entry. Might call deleteDir.
+* Description: Deletes a directory entry. Might call deleteDir
 *
 * Parameters:
 *   sDir:      Path to directory entry to be deleted
@@ -193,7 +193,7 @@ static int deleteEntry(const char *sDir)
     int r;
     struct stat statbuf;
 
-    // In the interactive-mode, the user has to confirm whether to delete the current directory entry.
+    // In the interactive-mode, the user has to confirm whether to delete the current directory entry
     if (isInteractive)
     {
         fprintf(stderr, "remove: Do you really want to delete '%s' (y/N)? ", sDir);
@@ -207,7 +207,7 @@ static int deleteEntry(const char *sDir)
     if (r == 0)
     {
         if (IS_DIR(statbuf.st_mode))
-            r = isRecursive ? deleteDir(sDir) : -1; // Only delete a directory when the recursion option (-r or -R) is set.
+            r = isRecursive ? deleteDir(sDir) : -1; // Only delete a directory when the recursion option (-r or -R) is set
         else
             r = unlink(sDir);
     }
