@@ -41,13 +41,22 @@ int main(int argc, char const *argv[])
 
     while ((readBuffer = read(src, buffer, SIZE)) > 0)
         if (write(dest, buffer, readBuffer) != readBuffer)
+        {
             printf("Error in writing data to \n");
+            return EXIT_FAILURE;
+        }
 
     if (close(src) == -1)
+    {
         printf("Error in closing source file\n");
+        return EXIT_FAILURE;
+    }
 
     if (close(dest) == -1)
+    {
         printf("Error in closing destination file\n");
+        return EXIT_FAILURE;
+    }
 
     printf("File copied successfully!\n");
 
